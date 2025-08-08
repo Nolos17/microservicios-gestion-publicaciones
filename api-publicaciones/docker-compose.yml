@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  publicaciones-server:
+    build: .
+    container_name: publicaciones-server
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq # RabbitMQ externo, debe estar en la red red-central
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
+
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/ # Eureka externo
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://crdb-node1:26257,crdb-node2:26257,crdb-node3:26257/publicaciones_db?sslmode=disable&application_name=servicio-publicaciones
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+
+    networks:
+      - red-central
+
+networks:
+  red-central:
+    external: true

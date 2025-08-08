@@ -1,0 +1,33 @@
+services:
+  notificaciones-server:
+    build: .
+    container_name: notificaciones-server
+    ports:
+      - "8080:8080"
+    networks:
+      - internal-network
+
+
+networks:
+  internal-network:
+    driver: bridge
+
+
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:4.1.2-management
+    container_name: rabbitmq-23441
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - internal-network
+
+volumes:
+  rabbitmq_data:
